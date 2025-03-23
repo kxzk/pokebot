@@ -10,7 +10,7 @@
 * scrape card metadata
 
 ```bash
-https://game8.co/games/Pokemon-TCG-Pocket/archives/482685"
+https://game8.co/games/Pokemon-TCG-Pocket/archives/482685
 ```
 
 * scrape all card image data
