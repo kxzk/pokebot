@@ -1,4 +1,6 @@
-<h3 align="center"><img src="./images/tcg-pocket.webp"></h3>
+<h3 align="center">
+<img src="./images/tcg-pocket.webp" href="https://tcgpocket.pokemon.com/en-us/">
+</h3>
 
 <br>
 <br>
