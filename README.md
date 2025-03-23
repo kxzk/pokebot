@@ -70,7 +70,15 @@ jp.pokemon.pokemontcgp
 <br>
 
 ```bash
+# need to lock resolution for consistency
+adb shell wm size # get current resolution
+adb exec-out screencap -p > screen.png # screenshot
+adb shell input tap <X> <Y>           # tap
+adb shell input swipe <X1> <Y1> <X2> <Y2> <duration> # swipe
+adb shell input text 'Charmander' # type text
 
+adb logcat # full log output
+adb shell monky -p <pkg> -v 1 # launch app (basic)
 ```
 
 <br>
