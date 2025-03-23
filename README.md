@@ -11,6 +11,12 @@
 https://ptcgpocket.gg/cards/
 ```
 
+* static URL for card images
+
+```bash
+https://static.dotgg.gg/pokepocket/card/{card_number}.webp
+```
+
 * name of app
 
 ```bash
