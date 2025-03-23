@@ -5,6 +5,8 @@
 
 ### references
 
+<br>
+
 * scrape all card image data
 
 ```bash
@@ -28,6 +30,8 @@ jp.pokemon.pokemontcgp
 <br>
 
 ### scrcpy commands
+
+<br>
 
 * [install scrcpy](https://github.com/Genymobile/scrcpy/blob/master/doc/linux.md)
 
