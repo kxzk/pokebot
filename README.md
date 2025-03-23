@@ -1,5 +1,7 @@
 <h3 align="center">
-<img src="./images/tcg-pocket.webp" href="https://tcgpocket.pokemon.com/en-us/">
+    <a href="https://tcgpocket.pokemon.com/en-us/" target="_blank">
+        <img src="./images/tcg-pocket.webp"/>
+    </a>
 </h3>
 
 <br>
