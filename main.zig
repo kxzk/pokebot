@@ -10,6 +10,10 @@ pub fn main() !void {
         "--turn-screen-off",
         "--show-touches",
     };
+
+    // --turn-screen-off
+    // --stay-awake (prevent device from sleeping)
+
     var scrcpyChild = std.process.Child.init(scrcpyArgs, allocator);
     scrcpyChild.stdout_behavior = .Inherit;
     scrcpyChild.stderr_behavior = .Inherit;
@@ -17,11 +21,11 @@ pub fn main() !void {
 
     std.time.sleep(2 * std.time.ns_per_s);
 
-    /// list all apps
-    /// scrcpy --list-apps
+    // list all apps
+    // scrcpy --list-apps
 
-    /// start app on launch
-    /// scrcpy --start-app=org.mozilla.firefox
+    // start app on launch
+    // scrcpy --start-app=org.mozilla.firefox
 
     _ = try scrcpyChild.wait();
 }
