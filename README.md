@@ -1,4 +1,4 @@
-![header-img](./images/header.png)
+<h3 align="center"><img src="./images/header.png"></h3>
 
 <br>
 <br>
