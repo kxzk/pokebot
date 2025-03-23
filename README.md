@@ -1,4 +1,4 @@
-<h3 align="center"><img src="./images/header.png"></h3>
+<h3 align="center"><img src="./images/tcg-pocket.webp"></h3>
 
 <br>
 <br>
@@ -55,6 +55,17 @@ jp.pokemon.pokemontcgp
 -Sw # stay-awake + turn-screen-off = prevent device from sleeping
 
 --show-touches         # show touches
+
+```
+
+<br>
+<br>
+
+### adb
+
+<br>
+
+```bash
 
 ```
 
