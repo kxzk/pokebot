@@ -29,7 +29,7 @@ jp.pokemon.pokemontcgp
 <br>
 <br>
 
-### scrcpy commands
+### scrcpy
 
 <br>
 
