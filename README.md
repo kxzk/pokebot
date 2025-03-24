@@ -98,13 +98,18 @@ adb logcat --pid=<pid> # get logcat for pid
 
 adb shell getevent -lt > touches.log # get touch events
 
+adb shell ls # list files in device
+adb shell rm # remove files in device
+
+# screenshots
+adb exec-out screencap -p > screen.png
+adb shell screencap /sdcard/test.png
+adb pull /sdcard/test.png test.png
+
 adb shell wm size # get current resolution
-adb exec-out screencap -p > screen.png # screenshot
 adb shell input tap <X> <Y>           # tap
 adb shell input swipe <X1> <Y1> <X2> <Y2> <duration> # swipe
 adb shell input text 'Charmander' # type text
-
-adb shell monky -p <pkg> -v 1 # launch app (basic)
 
 adb shell settings get system show_touches # get show_touches values
 ```
