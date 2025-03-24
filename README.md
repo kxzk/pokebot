@@ -75,17 +75,11 @@ jp.pokemon.pokemontcgp
 
 * [install scrcpy](https://github.com/Genymobile/scrcpy/blob/master/doc/linux.md)
 
-* start up scrcpy on app
-
 ```bash
 ./scrcpy --start-app=jp.pokemon.pokemontcgp
 ```
 
 ```bash
---start-app=<package>  # start the app with the given package
---stay-awake           # prevent the device from sleeping
---turn-screen-off
-
 -Sw # stay-awake + turn-screen-off = prevent device from sleeping
 
 --show-touches         # show touches
