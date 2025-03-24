@@ -13,6 +13,8 @@
 
 * [Galaxy A16 5G](https://www.telcel.com/tienda/producto/telefonos-y-smartphones/galaxy-a16-gris-128gb/71001512)
 
+<br>
+
 ```bash
 screen_size: 1080x2340
 ```
