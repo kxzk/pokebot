@@ -25,6 +25,16 @@ screen_size: 1080x2340
 <br>
 
 - [ ] automate flow to battle
+
+```bash
+# to battle screen
+adb shell input tap 739 2288
+adb shell input tap 260 1912
+adb shell input tap 739 1947
+
+# need battle select button
+```
+
 - [ ] screenshot -> llm pipeline (validate game understaning)
 - [ ] parse limitless tcg deck fmt -> decklist
 
