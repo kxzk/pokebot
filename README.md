@@ -36,6 +36,13 @@ adb shell input tap 739 1947
 ```
 
 - [ ] screenshot -> llm pipeline (validate game understaning)
+
+```bash
+adb exec-out screencap -p
+```
+
+- [ ] how to extract batte log
+
 - [ ] parse limitless tcg deck fmt -> decklist
 
 <br>
