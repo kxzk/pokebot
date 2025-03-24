@@ -17,6 +17,13 @@
 https://game8.co/games/Pokemon-TCG-Pocket/archives/482685
 ```
 
+* scrape all card data (best one)
+
+```bash
+# GET
+https://api.dotgg.gg/cgfw/getcards?game=pokepocket&mode=indexed&cache=844
+```
+
 * scrape all card image data
 
 ```bash
