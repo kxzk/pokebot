@@ -13,6 +13,10 @@
 
 * [Galaxy A16 5G](https://www.telcel.com/tienda/producto/telefonos-y-smartphones/galaxy-a16-gris-128gb/71001512)
 
+```bash
+screen_size: 1080x2340
+```
+
 <br>
 <br>
 
@@ -85,7 +89,6 @@ jp.pokemon.pokemontcgp
 -Sw # stay-awake + turn-screen-off = prevent device from sleeping
 
 --show-touches         # show touches
-
 ```
 
 <br>
@@ -96,14 +99,17 @@ jp.pokemon.pokemontcgp
 <br>
 
 ```bash
-# need to lock resolution for consistency
+adb shell pidof -s jp.pokemon.pokemontcgp # get pid
+adb logcat --pid=<pid> # get logcat for pid
+
+adb shell getevent -lt > touches.log # get touch events
+
 adb shell wm size # get current resolution
 adb exec-out screencap -p > screen.png # screenshot
 adb shell input tap <X> <Y>           # tap
 adb shell input swipe <X1> <Y1> <X2> <Y2> <duration> # swipe
 adb shell input text 'Charmander' # type text
 
-adb logcat # full log output
 adb shell monky -p <pkg> -v 1 # launch app (basic)
 
 adb shell settings get system show_touches # get show_touches values
