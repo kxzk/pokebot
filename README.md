@@ -7,17 +7,37 @@
 <br>
 <br>
 
+### phone
+
+<br>
+
+* [Galaxy A16 5G](https://www.telcel.com/tienda/producto/telefonos-y-smartphones/galaxy-a16-gris-128gb/71001512)
+
+<br>
+<br>
+
+### todo
+
+<br>
+
+- [ ] automate flow to battle
+- [ ] screenshot -> llm pipeline (validate game understaning)
+- [ ] parse limitless tcg deck fmt -> decklist
+
+<br>
+<br>
+
 ### references
 
 <br>
 
-* scrape card metadata
+* limitless tcg deck builder
 
 ```bash
-https://game8.co/games/Pokemon-TCG-Pocket/archives/482685
+https://my.limitlesstcg.com/builder
 ```
 
-* scrape all card data (best one)
+* scrape all card data
 
 ```bash
 # GET
@@ -41,7 +61,6 @@ https://static.dotgg.gg/pokepocket/card/{card_number}.webp
 ```bash
 jp.pokemon.pokemontcgp
 ```
-
 
 <br>
 <br>
@@ -86,6 +105,21 @@ adb shell input text 'Charmander' # type text
 
 adb logcat # full log output
 adb shell monky -p <pkg> -v 1 # launch app (basic)
+
+adb shell settings get system show_touches # get show_touches values
+```
+
+<br>
+<br>
+
+### archive
+
+<br>
+
+* scrape card metadata
+
+```bash
+https://game8.co/games/Pokemon-TCG-Pocket/archives/482685
 ```
 
 <br>

@@ -1,0 +1,15 @@
+Pokémon: 6
+2 Leafeon ex A2a 82
+2 Eevee A1a 61
+2 Glaceon ex A2a 83
+
+Trainer: 14
+2 Professor's Research P-A 7
+2 Poké Ball P-A 5
+2 Giant Cape A2 147
+1 Celestic Town Elder A2a 88
+1 Irida A2a 87
+1 Erika A1 266
+2 Misty A1 267
+2 Sabrina A1 272
+1 Cyrus A2 190
