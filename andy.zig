@@ -56,6 +56,7 @@ pub const Andy = struct {
     }
 
     fn exec_adb(self: Andy, args: []const []const u8) !void {
+        // TODO: fix this - there is no spacing between arguments
         const adb_path = "/usr/bin/adb";
 
         var argv = std.ArrayList([]const u8).init(self.allocator);
