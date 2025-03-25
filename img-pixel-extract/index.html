@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Pixel Coordinate Viewer</title>
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f5f5f5;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 1200px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .upload-container {
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
+        padding: 20px;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        transition: border-color 0.3s;
+      }
+      .upload-container:hover {
+        border-color: #0066ff;
+      }
+      .image-container {
+        position: relative;
+        display: inline-block;
+        margin-top: 20px;
+        border: 1px solid #ccc;
+      }
+      #imageCanvas {
+        display: block;
+      }
+      .coordinates {
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 14px;
+        pointer-events: none;
+        z-index: 10;
+      }
+      .status-bar {
+        margin-top: 10px;
+        width: 100%;
+        padding: 8px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Image Pixel Coordinate Viewer</h1>
+      <div class="upload-container" id="uploadArea">
+        <input type="file" id="imageUpload" accept="image/png" />
+        <p>Select a PNG image (1080×2340 pixels) or drag and drop here</p>
+      </div>
+      <div class="image-container" id="imageContainer">
+        <canvas id="imageCanvas"></canvas>
+        <div class="coordinates" id="coordinates" style="display: none">
+          X: 0, Y: 0
+        </div>
+      </div>
+      <div class="status-bar" id="statusBar">Ready to load an image</div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Get DOM elements
+        const imageUpload = document.getElementById("imageUpload");
+        const imageCanvas = document.getElementById("imageCanvas");
+        const ctx = imageCanvas.getContext("2d");
+        const coordinates = document.getElementById("coordinates");
+        const imageContainer = document.getElementById("imageContainer");
+        const statusBar = document.getElementById("statusBar");
+        const uploadArea = document.getElementById("uploadArea");
+
+        // Variables for image handling
+        let originalWidth = 1080;
+        let originalHeight = 2340;
+        let scale = 1;
+        let imageLoaded = false;
+        let originalImage = null;
+
+        // Drag and drop functionality
+        uploadArea.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          uploadArea.style.borderColor = "#0066ff";
+        });
+
+        uploadArea.addEventListener("dragleave", () => {
+          uploadArea.style.borderColor = "#ccc";
+        });
+
+        uploadArea.addEventListener("drop", (e) => {
+          e.preventDefault();
+          uploadArea.style.borderColor = "#ccc";
+
+          const file = e.dataTransfer.files[0];
+          if (file && file.type === "image/png") {
+            imageUpload.files = e.dataTransfer.files;
+            const event = new Event("change");
+            imageUpload.dispatchEvent(event);
+          } else {
+            alert("Please drop a PNG image.");
+          }
+        });
+
+        // File upload handler
+        imageUpload.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+
+          if (!file) return;
+
+          if (!file.type.match("image/png")) {
+            alert("Please select a PNG image.");
+            return;
+          }
+
+          statusBar.textContent = "Loading image...";
+
+          const reader = new FileReader();
+
+          reader.onload = (event) => {
+            const img = new Image();
+
+            img.onload = () => {
+              // Store original image for resizing
+              originalImage = img;
+
+              // Check image dimensions
+              if (img.width !== 1080 || img.height !== 2340) {
+                console.warn(
+                  `Image dimensions are ${img.width}x${img.height}. Expected 1080x2340.`,
+                );
+              }
+
+              // Set original dimensions
+              originalWidth = img.width;
+              originalHeight = img.height;
+
+              // Calculate scale to fit in viewport
+              const maxWidth = Math.min(window.innerWidth - 80, 1080);
+              const maxHeight = Math.min(window.innerHeight - 250, 2340);
+
+              scale = Math.min(
+                maxWidth / originalWidth,
+                maxHeight / originalHeight,
+              );
+
+              // Set canvas dimensions
+              imageCanvas.width = originalWidth * scale;
+              imageCanvas.height = originalHeight * scale;
+
+              // Draw image on canvas
+              ctx.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+
+              imageLoaded = true;
+              statusBar.textContent = `Image loaded: ${originalWidth}x${originalHeight} px`;
+            };
+
+            img.onerror = () => {
+              statusBar.textContent = "Error loading image.";
+              alert("Failed to load the image. Please try another file.");
+            };
+
+            img.src = event.target.result;
+          };
+
+          reader.onerror = () => {
+            statusBar.textContent = "Error reading file.";
+            alert("Failed to read the file. Please try again.");
+          };
+
+          reader.readAsDataURL(file);
+        });
+
+        // Mouse move handler
+        imageCanvas.addEventListener("mousemove", (e) => {
+          if (!imageLoaded) return;
+
+          // Get position relative to canvas
+          const rect = imageCanvas.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          // Convert to original image coordinates
+          const originalX = Math.round(x / scale);
+          const originalY = Math.round(y / scale);
+
+          // Update coordinate display
+          coordinates.textContent = `X: ${originalX}, Y: ${originalY}`;
+          coordinates.style.display = "block";
+
+          // Update status bar
+          statusBar.textContent = `Position: X: ${originalX}, Y: ${originalY}`;
+
+          // Position coordinate display near cursor but not under it
+          coordinates.style.left = `${x + 20}px`;
+          coordinates.style.top = `${y - 30}px`;
+
+          // Handle edge cases for coordinate display positioning
+          const coordRect = coordinates.getBoundingClientRect();
+          if (coordRect.right > rect.right) {
+            coordinates.style.left = `${x - coordRect.width - 10}px`;
+          }
+          if (coordRect.top < rect.top) {
+            coordinates.style.top = `${y + 10}px`;
+          }
+        });
+
+        // Hide coordinates when mouse leaves canvas
+        imageCanvas.addEventListener("mouseleave", () => {
+          coordinates.style.display = "none";
+          statusBar.textContent = imageLoaded
+            ? `Image loaded: ${originalWidth}x${originalHeight} px`
+            : "Ready to load an image";
+        });
+
+        // Handle window resize
+        window.addEventListener("resize", () => {
+          if (imageLoaded && originalImage) {
+            // Recalculate scale and redraw
+            const maxWidth = Math.min(window.innerWidth - 80, 1080);
+            const maxHeight = Math.min(window.innerHeight - 250, 2340);
+
+            scale = Math.min(
+              maxWidth / originalWidth,
+              maxHeight / originalHeight,
+            );
+
+            imageCanvas.width = originalWidth * scale;
+            imageCanvas.height = originalHeight * scale;
+
+            // Draw original image with new dimensions
+            ctx.drawImage(
+              originalImage,
+              0,
+              0,
+              imageCanvas.width,
+              imageCanvas.height,
+            );
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
