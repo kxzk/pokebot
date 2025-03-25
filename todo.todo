@@ -1,3 +1,6 @@
 TODO
 
 - [ ] adb command spacing is off (there is none)
+- [ ] add enum for UI elements buttons
+- [ ] simplify python data pull scripts (only pull if new data, incremental)
+- [ ] run python data pull scripts daily via github action
