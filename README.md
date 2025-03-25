@@ -26,6 +26,7 @@ screen_size: 1080x2340
 
 <br>
 
+- [ ] some way to take img -> extract pixel coordinates
 - [ ] automate flow to battle
 
 ```bash
@@ -43,8 +44,8 @@ adb shell input tap 739 1947
 adb exec-out screencap -p
 ```
 
+- [ ] exp farmer bot
 - [ ] how to extract batte log
-
 - [ ] parse limitless tcg deck fmt -> decklist
 
 <br>
