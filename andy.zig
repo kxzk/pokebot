@@ -10,7 +10,7 @@ pub const Andy = struct {
         var child = std.process.Child.init(
             &[_][]const u8 {
                 scrcpy_path,
-                "-start-app=jp.pokemon.pokemontcgp",
+                "--start-app=jp.pokemon.pokemontcgp",
                 // --always-on-top
                 // --no-audio
                 // --turn-screen-off
