@@ -26,7 +26,6 @@ screen_size: 1080x2340
 
 <br>
 
-- [ ] some way to take img -> extract pixel coordinates
 - [ ] automate flow to battle
 
 ```bash
