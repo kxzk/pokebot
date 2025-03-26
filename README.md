@@ -64,7 +64,7 @@ https://my.limitlesstcg.com/builder
 
 ```bash
 # GET
-https://api.dotgg.gg/cgfw/getcards?game=pokepocket&mode=indexed&cache=844
+https://api.dotgg.gg/cgfw/getcards?game=pokepocket&mode=indexed&cache={cache_idx}
 ```
 
 * scrape all card image data
