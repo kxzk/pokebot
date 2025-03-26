@@ -1,4 +1,5 @@
 const std = @import("std");
+const ui = @import("ui.zig");
 
 pub const Andy = struct {
     allocator: std.mem.Allocator,
@@ -37,7 +38,12 @@ pub const Andy = struct {
         _ = self.scrcpy_process.kill() catch {};
     }
 
-    pub fn tap(self: Andy, x: u16, y: u16) !void {
+    pub fn tap(self: Andy, element: ui.UI) !void {
+        const xy = element.coords();
+        try self.use_tap(xy[0], xy[1]);
+    }
+
+    fn use_tap(self: Andy, x: u16, y: u16) !void {
         try self.exec_adb(&[_][]const u8 {
             "shell", "input", "tap",
             try std.fmt.allocPrint(self.allocator, "{}", .{x}),

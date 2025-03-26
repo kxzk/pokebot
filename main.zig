@@ -9,10 +9,10 @@ pub fn main() !void {
     var device = try andy.Andy.init(allocator);
     defer device.deinit();
 
-    try device.tap(719, 2288); // battle icon
+    try device.tap(.BattleBtn)
     std.time.sleep(10_000_000_000); // 10 seconds (in ns)
-    try device.tap(260, 1912); // versus icon
+    try device.tap(.VersusBtn)
     std.time.sleep(10_000_000_000);
-    try device.tap(739, 1947); // random match icon
+    try device.tap(.RandomMatchBtn)
     std.time.sleep(10_000_000_000);
 }
