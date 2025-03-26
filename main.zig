@@ -9,6 +9,8 @@ pub fn main() !void {
     var device = try andy.Andy.init(allocator);
     defer device.deinit();
 
+    // TODO: if start screen, recognize, and then tap
+    // maybe move tap to a generic tap
     try device.tap(.BattleBtn)
     std.time.sleep(10_000_000_000); // 10 seconds (in ns)
     try device.tap(.VersusBtn)
