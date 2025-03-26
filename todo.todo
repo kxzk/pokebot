@@ -1,12 +1,15 @@
 TODO
 
-- [ ] adb command spacing is off (there is none)
-- [ ] add enum for UI elements buttons
 - [ ] screenshot -> llm pipeline (validate game understanding)
 - [ ] how to extract battle log
 
 NOTE
 
-- [ ] simplify python data pull scripts (only pull if new data, incremental)
 - [ ] parse limitless tcg deck fmt -> decklist
 - [ ] exp farmer bot (using system auto battle feature)
+
+DONE
+
+- [x] adb command spacing is off (there is none)
+- [x] add enum for UI elements buttons
+- [x] simplify python data pull scripts (only pull if new data, incremental)
