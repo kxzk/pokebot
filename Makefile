@@ -3,7 +3,7 @@
 cap:
 ## make cap: take a screenshot on device
 	@echo "[screenshot] taking..."
-	@adb exec-out screencap -p > img.png
+	@adb exec-out screencap -p > screenshot.png
 
 app:
 ## make app: run img-pixel-extract app
