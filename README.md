@@ -107,16 +107,3 @@ adb shell settings get system show_touches # get show_touches values
 
 <br>
 <br>
-
-### archive
-
-<br>
-
-* scrape card metadata
-
-```bash
-https://game8.co/games/Pokemon-TCG-Pocket/archives/482685
-```
-
-<br>
-<br>
