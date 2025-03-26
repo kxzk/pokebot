@@ -22,34 +22,6 @@ screen_size: 1080x2340
 <br>
 <br>
 
-### todo
-
-<br>
-
-- [ ] automate flow to battle
-
-```bash
-# to battle screen
-adb shell input tap 739 2288
-adb shell input tap 260 1912
-adb shell input tap 739 1947
-
-# need battle select button
-```
-
-- [ ] screenshot -> llm pipeline (validate game understaning)
-
-```bash
-adb exec-out screencap -p
-```
-
-- [ ] exp farmer bot
-- [ ] how to extract batte log
-- [ ] parse limitless tcg deck fmt -> decklist
-
-<br>
-<br>
-
 ### references
 
 <br>

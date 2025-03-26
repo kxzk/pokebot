@@ -11,18 +11,14 @@ import requests
 
 
 def download_images(csv_file, output_dir):
-    # Ensure the output directory exists
     os.makedirs(output_dir, exist_ok=True)
 
-    # Extract the 'id' column values from the CSV
     with open(csv_file, mode="r", newline="", encoding="utf-8") as file:
         reader = csv.DictReader(file)
-        # Verify 'id' column exists
         if "id" not in reader.fieldnames:
             raise KeyError("CSV does not contain an 'id' column.")
         ids = [row["id"] for row in reader]
 
-    # Download each image using the extracted id
     for card_id in ids:
         image_url = f"https://static.dotgg.gg/pokepocket/card/{card_id}.webp"
         try:
