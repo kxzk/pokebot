@@ -1,6 +1,6 @@
 <h3 align="center">
     <a href="https://tcgpocket.pokemon.com/en-us/" target="_blank">
-        <img src="./images/header.png"/>
+        <img src="./images/header-2.png"/>
     </a>
 </h3>
 
