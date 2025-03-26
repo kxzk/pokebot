@@ -11,10 +11,14 @@ pub fn main() !void {
 
     // TODO: if start screen, recognize, and then tap
     // maybe move tap to a generic tap
-    try device.tap(.BattleBtn)
-    std.time.sleep(10_000_000_000); // 10 seconds (in ns)
-    try device.tap(.VersusBtn)
-    std.time.sleep(10_000_000_000);
-    try device.tap(.RandomMatchBtn)
-    std.time.sleep(10_000_000_000);
+
+    // TODO: maybe add sleep to tap
+    std.time.sleep(2_000_000_000);
+    try device.tap(.BattleBtn);
+    std.time.sleep(5_000_000_000); // 5 seconds (in ns)
+    try device.tap(.VersusBtn);
+    std.time.sleep(5_000_000_000);
+    try device.tap(.RandomMatchBtn);
+    std.time.sleep(5_000_000_000);
+    try device.tap(.StartMatchBtn);
 }
