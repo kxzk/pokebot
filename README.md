@@ -65,7 +65,10 @@ jp.pokemon.pokemontcgp
 <br>
 
 ```bash
-
+# ** - supports image upload
+gpt-4o**
+gpt-4o-mini**
+o3-mini
 ```
 
 <br>
