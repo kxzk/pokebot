@@ -1,6 +1,10 @@
 TODO
 
 - [ ] screenshot -> llm pipeline (validate game understanding)
+  - [ ] take screenshot with adb
+  - [ ] take image send to llm
+- [ ] collect more ui locations
+- [ ] figure out naming scheme for ui
 - [ ] how to extract battle log
 
 NOTE
