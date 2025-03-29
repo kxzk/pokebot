@@ -9,8 +9,9 @@ TODO
 
 NOTE
 
-- [ ] parse limitless tcg deck fmt -> decklist
-- [ ] exp farmer bot (using system auto battle feature)
+* llm might get costly, swap to ollama
+* parse limitless tcg deck fmt -> decklist
+* exp farmer bot (using system auto battle feature)
 
 DONE
 

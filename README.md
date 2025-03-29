@@ -60,6 +60,17 @@ jp.pokemon.pokemontcgp
 <br>
 <br>
 
+### openai models
+
+<br>
+
+```bash
+
+```
+
+<br>
+<br>
+
 ### scrcpy
 
 <br>
