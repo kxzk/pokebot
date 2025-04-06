@@ -24,7 +24,7 @@ WANTED_FIELDS = [
     "slug",
     "hp",
     "stage",
-    "prew_stage_name",
+    "prev_stage_name",
     "attack",
     "ability",
     "text",
