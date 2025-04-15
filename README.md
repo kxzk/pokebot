@@ -67,6 +67,8 @@ jp.pokemon.pokemontcgp
 ```bash
 # (if share, increased free token limits)
 # ** - supports image upload
+gpt-4.1-nano-2025-04-14** -> (0.1 per 1M)
+gpt-4.1-mini-2025-04-14** -> (0.4 per 1M)
 gpt-4o** -> (10 per 1M)
 gpt-4o-mini** -> (0.60 per 1M))
 gpt-4.5-preview** -> (150 per 1M)
