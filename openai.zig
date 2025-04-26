@@ -4,102 +4,118 @@ const json = std.json;
 const base64 = std.base64;
 const fs = std.fs;
 
-pub const OpenAIRequest = struct {
+pub const Response = struct {
+    id: ?[]const u8 = null,
+
+    pub const Choice = struct {
+        message: struct {
+            content: []const u8,
+        },
+    };
+
+    choices: []Choice,
+};
+
+pub fn chat(
+    allocator: std.mem.Allocator,
+    api_key: []const u8,
     model_id: []const u8,
     prompt: []const u8,
-    image_locations: ?[][]const u8 = null,
+) !Response {
+    return try chatInternal(allocator, api_key, model_id, prompt, null);
+}
+
+pub fn chat_multi(
+    // for image requests
+    allocator: std.mem.Allocator,
     api_key: []const u8,
+    model_id: []const u8,
+    prompt: []const u8,
+    image_path: []const u8,
+) !Response {
+    return try chatInternal(allocator, api_key, model_id, prompt, image_path);
+}
 
-    const Content = struct {
-        type: []const u8,
-        text: ?[]const u8 = null,
-        image_url: ?[]const u8 = null,
-    };
+fn chatInternal(
+    allocator: std.mem.Allocator,
+    api_key: []const u8,
+    model_id: []const u8,
+    prompt: []const u8,
+    image_path_or_null: ?[]const u8,
+) !Response {
 
-    const Input = struct {
-        role: []const u8,
-        content: []Content,
-    };
+    const uri = try std.Uri.parse("https://api.openai.com/v1/chat/completions");
 
-    const Payload = struct {
-        model: []const u8,
-        input: []Input,
-    };
+    var contents = std.ArrayList(json.Value).init(allocator);
+    defer contents.deinit();
 
-    const Response = struct {
-        id: []const u8,
-        object: []const u8,
-        created: u64,
-        // Add other response fields as needed
-    };
+    try contents.append(json.Value{ .object = &{
+        .{ .string = "type", .string_value = "text" },
+        .{ .string = "text", .string_value = prompt },
+    } });
 
-    pub fn sendRequest(self: *const OpenAIRequest, allocator: std.mem.Allocator) !Response {
-        var client = http.Client{ .allocator = allocator };
-        defer client.deinit();
+    if (image_path_or_null) |image_path| {
+        // read & base-64 encode.
+        var file = try fs.cwd().openFile(image_path, .{});
+        defer file.close();
 
-        const uri = try std.Uri.parse("https://api.openai.com/v1/chat/responses");
-        
-        var contents = std.ArrayList(Content).init(allocator);
-        defer contents.deinit();
+        const raw = try file.readToEndAlloc(allocator, std.math.maxInt(usize));
+        defer allocator.free(raw);
 
-        try contents.append(.{
-            .type = "text",
-            .text = self.prompt,
-        });
+        const encoded = base64.standard.Encoder.encode(raw);
 
-        if (self.image_locations) |image_paths| {
-            for (image_paths) |path| {
-                var file = try fs.cwd().openFile(path, .{});
-                defer file.close();
-
-                const image_data = try file.readToEndAlloc(allocator, std.math.maxInt(usize));
-                defer allocator.free(image_data);
-
-                const encoded = base64.standard.Encoder.encode(image_data);
-                const image_url = try std.fmt.allocPrint(
-                    allocator,
-                    "data:image/{s};base64,{s}",
-                    .{ std.fs.path.extension(path), encoded }
-                );
-                defer allocator.free(image_url);
-
-                try contents.append(.{
-                    .type = "image_url",
-                    .image_url = image_url,
-                });
-            }
-        }
-
-        const input = Input{
-            .role = "user",
-            .content = contents.items,
-        };
-
-        const payload = Payload{
-            .model = self.model_id,
-            .input = &.{input},
-        };
-
-        var request = try client.request(.POST, uri, .{
-            .allocator = allocator,
-            .headers = .{
-                .authorization = try std.fmt.allocPrint(allocator, "Bearer {s}", .{self.api_key}),
-                .content_type = "application/json",
-            },
-        });
-        defer request.deinit();
-
-        try request.send(.{.allocator = allocator}, payload);
-
-        try request.wait();
-        const response_body = try request.reader().readAllAlloc(allocator, std.math.maxInt(usize));
-        defer allocator.free(response_body);
-
-        return try json.parseFromSliceLeaky(
-            Response,
+        const url_value = try std.fmt.allocPrint(
             allocator,
-            response_body,
-            .{ .ignore_unknown_fields = true }
+            "data:image/{s};base64,{s}",
+            .{ std.fs.path.extension(image_path), encoded },
         );
+        defer allocator.free(url_value);
+
+        try contents.append(json.Value{ .object = &{
+            .{ .string = "type", .string_value = "image_url" },
+            .{ .string = "image_url", .string_value = url_value },
+        } });
     }
-};
+
+    // build the outer `messages` array containing a single user message.
+    const message_obj = json.Value{ .object = &{
+        .{ .string = "role", .string_value = "user" },
+        .{ .string = "content", .array = contents.items },
+    } };
+
+    const messages_array = &[_]json.Value{message_obj};
+
+    const payload_json = json.Value{ .object = &{
+        .{ .string = "model", .string_value = model_id },
+        .{ .string = "messages", .array = messages_array },
+    } };
+
+    const payload_bytes = try json.stringifyAlloc(allocator, payload_json, .{});
+    defer allocator.free(payload_bytes);
+
+    var client = http.Client{ .allocator = allocator };
+    defer client.deinit();
+
+    var request = try client.request(.POST, uri, .{
+        .allocator = allocator,
+        .headers = .{
+            .authorization = try std.fmt.allocPrint(allocator, "Bearer {s}", .{ api_key }),
+            .content_type = "application/json",
+        },
+    });
+    defer request.deinit();
+
+    try request.writeAll(payload_bytes);
+    try request.finish();
+
+    try request.wait();
+
+    const body = try request.reader().readAllAlloc(allocator, std.math.maxInt(usize));
+    defer allocator.free(body);
+
+    const resp = try json.parseFromSliceLeaky(Response, allocator, body, .{
+        .ignore_unknown_fields = true,
+    });
+
+    return resp;
+}

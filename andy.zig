@@ -66,6 +66,57 @@ pub const Andy = struct {
         });
     }
 
+    pub fn screenshot(self: Andy, out_path: []const u8) !void {
+        // command: adb exec-out screencap -p screen.png
+        // 
+        // instead of shell redirection (>) we pipe
+        // png bytes directly from the adb child process stdout and stream them
+        // into destination file
+        var argv = std.ArrayList([]const u8).init(self.allocator);
+        defer argv.deinit();
+
+        try argv.appendSlice(&.{
+            "/usr/bin/adb",
+            "exec-out",
+            "screencap",
+            "-p",
+        });
+
+        var child = std.process.Child.init(argv.items, self.allocator);
+
+        child.stdin_behavior = .Ignore;
+        child.stdout_behavior = .Pipe;
+        child.stderr_behavior = .Pipe;
+
+        try child.spawn();
+
+        // createFile truncates if it already exists
+        const cwd = std.fs.cwd();
+        var file = try cwd.createFile(out_path, .{ .truncate = true });
+        defer file.close();
+
+        // stream adb stdout -> file in chunks
+        var buffer: [4096]u8 = undefined;
+        var adb_out_file = child.stdout.?;
+        while (true) {
+            const bytes_read = try adb_out_file.read(&buffer);
+            if (bytes_read == 0) break;
+            try file.writeAll(buffer[0..bytes_read]);
+        }
+
+        const term = try child.wait();
+        switch (term) {
+            .Exited => |code| {
+                if (code != 0) {
+                    return error.AdbScreenshotFailed;
+                }
+            },
+            else => {
+                return error.AdbScreenshotFailed;
+            },
+        }
+    }
+
     fn exec_adb(self: Andy, args: []const []const u8) !void {
         var argv = std.ArrayList([]const u8).init(self.allocator);
         defer argv.deinit();
