@@ -10,7 +10,7 @@ import os
 import requests
 
 API_KEY = os.environ["OAI_POKEBOT"]
-API_URL = "https://api.openai.com/v1/responses"
+API_URL = "https://api.openai.com/v1/chat/completions"
 
 local_image_path = "../images/app/solo__adv_battles.png"
 
