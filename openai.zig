@@ -64,10 +64,16 @@ fn chatInternal(
 
         const encoded = base64.standard.Encoder.encode(raw);
 
+        const ext_with_dot = std.fs.path.extension(image_path);
+        const ext = if (ext_with_dot.len > 0 and ext_with_dot[0] == '.')
+            ext_with_dot[1..]
+        else
+            ext_with_dot;
+
         const url_value = try std.fmt.allocPrint(
             allocator,
             "data:image/{s};base64,{s}",
-            .{ std.fs.path.extension(image_path), encoded },
+            .{ ext, encoded },
         );
         defer allocator.free(url_value);
 

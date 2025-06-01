@@ -117,6 +117,13 @@ pub const Andy = struct {
         }
     }
 
+    pub fn tapAndCapture(self: Andy, element: ui.UI, out_path: []const u8) !void {
+        try self.tap(element);
+        // allow UI changes to settle before capturing
+        std.time.sleep(2_000_000_000);
+        try self.screenshot(out_path);
+    }
+
     fn exec_adb(self: Andy, args: []const []const u8) !void {
         var argv = std.ArrayList([]const u8).init(self.allocator);
         defer argv.deinit();
