@@ -1,8 +1,11 @@
 TODO
 
-- [ ] screenshot -> llm pipeline (validate game understanding)
-  - [ ] take screenshot with adb
-  - [ ] take image send to llm
+- [ ] why aren't adb commands working after first command -> describe call?
+- [ ] update model to 4.1 (perhaps?)
+- [ ] test claude 4 on ui coordinate identification
+
+- [ ] work on automating exp farmer auto-bot
+
 - [ ] collect more ui locations
 - [ ] figure out naming scheme for ui
 - [ ] how to extract battle log
@@ -18,3 +21,7 @@ DONE
 - [x] adb command spacing is off (there is none)
 - [x] add enum for UI elements buttons
 - [x] simplify python data pull scripts (only pull if new data, incremental)
+- [x] screenshot -> llm pipeline (validate game understanding)
+  - [x] take screenshot with adb
+  - [x] take image send to llm
+

@@ -1,5 +1,5 @@
 const std = @import("std");
-const ui = @import("ui.zig");
+const ui = @import("ui");
 
 pub const Andy = struct {
     allocator: std.mem.Allocator,
