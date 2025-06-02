@@ -22,7 +22,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    
+
     // Andy depends on ui
     andy_mod.addImport("ui", ui_mod);
 
@@ -32,7 +32,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    
+
     // Main depends on andy and openai
     exe_mod.addImport("andy", andy_mod);
     exe_mod.addImport("openai", openai_mod);
