@@ -1,9 +1,10 @@
 TODO
 
-- [ ] why aren't adb commands working after first command -> describe call?
+- [ ] add better config management
 - [ ] update model to 4.1 (perhaps?)
 - [ ] test claude 4 on ui coordinate identification
 
+- [ ] work on restructure for tools + tool use
 - [ ] work on automating exp farmer auto-bot
 
 - [ ] collect more ui locations
@@ -18,6 +19,7 @@ NOTE
 
 DONE
 
+- [x] why aren't adb commands working after first command -> describe call?
 - [x] adb command spacing is off (there is none)
 - [x] add enum for UI elements buttons
 - [x] simplify python data pull scripts (only pull if new data, incremental)
