@@ -6,6 +6,7 @@ pub const Andy = struct {
     scrcpy_process: std.process.Child,
 
     pub fn init(allocator: std.mem.Allocator) !Andy {
+        // TODO: move to config file
         const scrcpy_path = "/home/feyd/scrcpy-linux-x86_64-v3.1/scrcpy";
 
         var child = std.process.Child.init(&[_][]const u8{
@@ -37,6 +38,7 @@ pub const Andy = struct {
 
     pub fn tap(self: Andy, element: ui.UI) !void {
         const xy = element.coords();
+        std.debug.print("\n[tap]: {} @ ({}, {})\n", .{ element, xy[0], xy[1] });
         try self.use_tap(xy[0], xy[1]);
     }
 
@@ -46,9 +48,13 @@ pub const Andy = struct {
         const y_str = try std.fmt.allocPrint(self.allocator, "{}", .{y});
         defer self.allocator.free(y_str);
 
+        std.time.sleep(100_000_000); // 100ms delay
+
         try self.exec_adb(&.{
             "shell", "input", "tap", x_str, y_str,
         });
+
+        std.time.sleep(100_000_000);
     }
 
     pub fn swipe(self: Andy, x1: u16, y1: u16, x2: u16, y2: u16) !void {
@@ -68,7 +74,7 @@ pub const Andy = struct {
 
     pub fn screenshot(self: Andy, out_path: []const u8) !void {
         // command: adb exec-out screencap -p screen.png
-        // 
+        //
         // instead of shell redirection (>) we pipe
         // png bytes directly from the adb child process stdout and stream them
         // into destination file
@@ -128,6 +134,7 @@ pub const Andy = struct {
         var argv = std.ArrayList([]const u8).init(self.allocator);
         defer argv.deinit();
 
+        // TODO: move to config
         const adb_path = [_][]const u8{"/usr/bin/adb"};
         try argv.appendSlice(&adb_path);
 
@@ -142,9 +149,40 @@ pub const Andy = struct {
         std.debug.print("\n", .{});
 
         var proc = std.process.Child.init(argv.items, self.allocator);
+        proc.stdout_behavior = .Pipe;
+        proc.stderr_behavior = .Pipe;
 
         try proc.spawn();
 
-        _ = try proc.wait();
+        const term = try proc.wait();
+
+        if (proc.stdout) |stdout| {
+            const stdout_data = try stdout.reader().readAllAlloc(self.allocator, 1024 * 1024);
+            defer self.allocator.free(stdout_data);
+            if (stdout_data.len > 0) {
+                std.debug.print("[stdout]: {s}\n", .{stdout_data});
+            }
+        }
+
+        if (proc.stderr) |stderr| {
+            const stderr_data = try stderr.reader().readAllAlloc(self.allocator, 1024 * 1024);
+            defer self.allocator.free(stderr_data);
+            if (stderr_data.len > 0) {
+                std.debug.print("[stderr]: {s}\n", .{stderr_data});
+            }
+        }
+
+        switch (term) {
+            .Exited => |code| {
+                if (code != 0) {
+                    std.debug.print("[error]: ADB command failed with exit code {}\n", .{code});
+                    return error.AdbCommandFailed;
+                }
+            },
+            else => {
+                std.debug.print("[error]: ADB command terminated abnormally\n", .{});
+                return error.AdbCommandFailed;
+            },
+        }
     }
 };
