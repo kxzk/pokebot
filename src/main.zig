@@ -2,15 +2,15 @@ const std = @import("std");
 const andy = @import("andy");
 const openai = @import("openai");
 
-// helper to send screenshot to OpenAI and print description
+// TODO: move api_key and model_id to config file
 fn describe(alloc: std.mem.Allocator, api_key: []const u8, model_id: []const u8, path: []const u8) !void {
-    const resp = try openai.chat_multi(alloc, api_key, model_id, "What is in the image?", path);
-    // defer resp.deinit();
+    // TODO: update this to be dynamic, will change depending on what we need to know
+    const question = "What is in the image?";
+    const resp = try openai.chatMulti(alloc, api_key, model_id, question, path);
     if (resp.choices.len > 0) {
         std.debug.print("{s}\n", .{resp.choices[0].message.content});
     }
 }
-
 
 pub fn main() !void {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
@@ -24,6 +24,9 @@ pub fn main() !void {
     var device = try andy.Andy.init(allocator);
     defer device.deinit();
 
+    std.time.sleep(2_000_000_000);
+
+    // TODO: add startScreenBtn press
 
     std.time.sleep(2_000_000_000);
     try device.tapAndCapture(.BattleBtn, "cap_battle.png");
