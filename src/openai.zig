@@ -24,7 +24,7 @@ pub fn chat(
     return try chatInternal(allocator, api_key, model_id, prompt, null);
 }
 
-pub fn chat_multi(
+pub fn chatMulti(
     // for image requests
     allocator: std.mem.Allocator,
     api_key: []const u8,
@@ -42,21 +42,20 @@ fn chatInternal(
     prompt: []const u8,
     image_path_or_null: ?[]const u8,
 ) !Response {
-
     const uri = try std.Uri.parse("https://api.openai.com/v1/chat/completions");
 
-    // Build request body as a string directly
+    // build request body as a string directly
     var body_buffer = std.ArrayList(u8).init(allocator);
     defer body_buffer.deinit();
-    
+
     var writer = body_buffer.writer();
     try writer.writeAll("{\"model\":\"");
     try writer.writeAll(model_id);
     try writer.writeAll("\",\"messages\":[{\"role\":\"user\",\"content\":[");
-    
-    // Add text content
+
+    // add text content
     try writer.writeAll("{\"type\":\"text\",\"text\":\"");
-    // Escape the prompt properly
+    // escape the prompt properly
     for (prompt) |c| {
         switch (c) {
             '"' => try writer.writeAll("\\\""),
@@ -94,7 +93,7 @@ fn chatInternal(
         try writer.writeAll(encoded);
         try writer.writeAll("\"}}");
     }
-    
+
     try writer.writeAll("]}]}");
 
     const payload_bytes = try body_buffer.toOwnedSlice();
