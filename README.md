@@ -7,6 +7,13 @@
 <br>
 <br>
 
+### Colored Debugging Output
+
+Debug print tags are now colorized for readability:
+
+- `[tap]` is displayed in magenta.
+- `[cmd]` is displayed in cyan.
+
 ### phone
 
 <br>
