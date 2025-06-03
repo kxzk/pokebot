@@ -1,5 +1,6 @@
 const std = @import("std");
 const ui = @import("ui");
+const colors = @import("colors");
 
 pub const Andy = struct {
     allocator: std.mem.Allocator,
@@ -38,7 +39,8 @@ pub const Andy = struct {
 
     pub fn tap(self: Andy, element: ui.UI) !void {
         const xy = element.coords();
-        std.debug.print("\n[tap]: {} @ ({}, {})\n", .{ element, xy[0], xy[1] });
+        const colored_tag = try colors.withTapColor(self.allocator, "[tap]");
+        std.debug.print("\n{s}: {} @ ({}, {})\n", .{ colored_tag, element, xy[0], xy[1] });
         try self.use_tap(xy[0], xy[1]);
     }
 
@@ -142,9 +144,10 @@ pub const Andy = struct {
             try argv.append(arg);
         }
 
-        std.debug.print("[cmd]: ", .{});
+        const colored_cmd = try colors.withCmdColor(self.allocator, "[cmd]");
+        std.debug.print("{s}: ", .{ colored_cmd });
         for (argv.items) |arg| {
-            std.debug.print("{s} ", .{arg});
+            std.debug.print("{s} ", .{ arg });
         }
         std.debug.print("\n", .{});
 
