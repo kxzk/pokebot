@@ -17,6 +17,12 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const config_mod = b.createModule(.{
+        .root_source_file = b.path("config.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
     const andy_mod = b.createModule(.{
         .root_source_file = b.path("src/andy.zig"),
         .target = target,
@@ -25,6 +31,8 @@ pub fn build(b: *std.Build) void {
 
     // Andy depends on ui
     andy_mod.addImport("ui", ui_mod);
+    // Andy depends on config
+    andy_mod.addImport("config", config_mod);
 
     // Main executable module
     const exe_mod = b.createModule(.{
@@ -36,6 +44,7 @@ pub fn build(b: *std.Build) void {
     // Main depends on andy and openai
     exe_mod.addImport("andy", andy_mod);
     exe_mod.addImport("openai", openai_mod);
+    exe_mod.addImport("config", config_mod);
 
     const exe = b.addExecutable(.{
         .name = "pokebot",

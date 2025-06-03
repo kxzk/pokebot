@@ -1,13 +1,13 @@
 const std = @import("std");
 const ui = @import("ui");
+const config = @import("config");
 
 pub const Andy = struct {
     allocator: std.mem.Allocator,
     scrcpy_process: std.process.Child,
 
     pub fn init(allocator: std.mem.Allocator) !Andy {
-        // TODO: move to config file
-        const scrcpy_path = "/home/feyd/scrcpy-linux-x86_64-v3.1/scrcpy";
+        const scrcpy_path = config.scrcpy_path;
 
         var child = std.process.Child.init(&[_][]const u8{
             scrcpy_path,
@@ -134,8 +134,7 @@ pub const Andy = struct {
         var argv = std.ArrayList([]const u8).init(self.allocator);
         defer argv.deinit();
 
-        // TODO: move to config
-        const adb_path = [_][]const u8{"/usr/bin/adb"};
+        const adb_path = [_][]const u8{config.adb_path};
         try argv.appendSlice(&adb_path);
 
         for (args) |arg| {

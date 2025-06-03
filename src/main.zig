@@ -1,8 +1,8 @@
 const std = @import("std");
 const andy = @import("andy");
 const openai = @import("openai");
+const config = @import("config");
 
-// TODO: move api_key and model_id to config file
 fn describe(alloc: std.mem.Allocator, api_key: []const u8, model_id: []const u8, path: []const u8) !void {
     // TODO: update this to be dynamic, will change depending on what we need to know
     const question = "What is in the image?";
@@ -17,9 +17,9 @@ pub fn main() !void {
     defer arena.deinit();
     const allocator = arena.allocator();
 
-    const api_key = std.process.getEnvVarOwned(allocator, "OAI_POKEBOT") catch return error.MissingApiKey;
+    const api_key = std.process.getEnvVarOwned(allocator, config.api_key_env) catch return error.MissingApiKey;
     defer allocator.free(api_key);
-    const model_id = "gpt-4o";
+    const model_id = config.model_id;
 
     var device = try andy.Andy.init(allocator);
     defer device.deinit();
