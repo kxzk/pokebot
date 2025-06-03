@@ -68,6 +68,17 @@ pub fn build(b: *std.Build) void {
 
     const run_exe_unit_tests = b.addRunArtifact(exe_unit_tests);
 
-    const test_step = b.step("test", "Run unit tests");
-    test_step.dependOn(&run_exe_unit_tests.step);
+	const colors_test_mod = b.createModule(.{
+		.root_source_file = b.path("test/colors_test.zig"),
+		.target = target,
+		.optimize = optimize,
+	});
+	colors_test_mod.addImport("colors", colors_mod);
+
+	const colors_tests = b.addTest(.{ .root_module = colors_test_mod });
+	const run_colors_tests = b.addRunArtifact(colors_tests);
+
+	const test_step = b.step("test", "Run unit tests");
+	test_step.dependOn(&run_exe_unit_tests.step);
+	test_step.dependOn(&run_colors_tests.step);
 }
