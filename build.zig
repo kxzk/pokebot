@@ -15,7 +15,13 @@ pub fn build(b: *std.Build) void {
         .root_source_file = b.path("src/openai.zig"),
         .target = target,
         .optimize = optimize,
-    });
+	});
+
+	const colors_mod = b.createModule(.{
+		.root_source_file = b.path("src/colors.zig"),
+		.target = target,
+		.optimize = optimize,
+	});
 
     const andy_mod = b.createModule(.{
         .root_source_file = b.path("src/andy.zig"),
@@ -24,7 +30,8 @@ pub fn build(b: *std.Build) void {
     });
 
     // Andy depends on ui
-    andy_mod.addImport("ui", ui_mod);
+	andy_mod.addImport("ui", ui_mod);
+	andy_mod.addImport("colors", colors_mod);
 
     // Main executable module
     const exe_mod = b.createModule(.{
