@@ -1,7 +1,7 @@
 TODO
 
 - [ ] add better config management
-- [ ] update model to 4.1 (perhaps?)
+- [ ] update model to 4.1
 - [ ] test claude 4 on ui coordinate identification
 
 - [ ] work on restructure for tools + tool use
